@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Expense Tracker</title>
+  <style>
+    body { font-family: Arial; margin: 2rem; }
+    input, select, button, textarea { width: 100%; margin: 0.5rem 0; padding: 0.5rem; max-width: 400px; }
+    .section { margin-bottom: 2rem; }
+  </style>
+</head>
+<body>
+  <h1>Expense Tracker</h1>
+
+  <div class="section">
+    <h2>Set Budgets</h2>
+    <input id="budget-user" placeholder="Your Name" />
+    <textarea id="budgets" placeholder="Enter as JSON: {'Food': 200, 'Transport': 100}"></textarea>
+    <button onclick="submitBudgets()">Set Budgets</button>
+  </div>
+
+  <div class="section">
+    <h2>Submit Expense</h2>
+    <input id="exp-name" placeholder="Expense Name" />
+    <input id="exp-amount" type="number" placeholder="Amount" />
+    <input id="exp-category" placeholder="Category" />
+    <input id="exp-date" type="date" />
+    <input id="exp-user" placeholder="Your Name" />
+    <button onclick="submitExpense()">Submit Expense</button>
+  </div>
+
+  <div class="section">
+    <h2>Generate Summary</h2>
+    <input id="summary-user" placeholder="Your Name" />
+    <input id="summary-mail" placeholder="Your Email" />
+    <button onclick="getSummary()">Get Summary</button>
+  </div>
+
+  <div id="output"></div>
+
+  <script>
+    const API = "http://localhost:5000/api";
+
+    async function submitBudgets() {
+      const user = document.getElementById("budget-user").value;
+      const rawBudgets = document.getElementById("budgets").value;
+      let budgets = {};
+      try {
+        budgets = JSON.parse(rawBudgets);
+      } catch {
+        return show("Invalid JSON in budget field");
+      }
+
+      const res = await fetch(`${API}/set-budgets`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user, budgets })
+      });
+
+      const data = await res.json();
+      show(data.message);
+    }
+
+    async function submitExpense() {
+      const payload = {
+        name: document.getElementById("exp-name").value,
+        amount: parseFloat(document.getElementById("exp-amount").value),
+        category: document.getElementById("exp-category").value,
+        date: document.getElementById("exp-date").value,
+        user: document.getElementById("exp-user").value
+      };
+
+      const res = await fetch(`${API}/submit-expense`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+      show(data.message);
+    }
+
+    async function getSummary() {
+      const user = document.getElementById("summary-user").value;
+      const mail = document.getElementById("summary-mail").value;
+
+      const res = await fetch(`${API}/summary`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user, mail })
+      });
+
+      const data = await res.json();
+      show(data.message);
+    }
+
+    function show(msg) {
+      document.getElementById("output").innerText = msg;
+    }
+  </script>
+</body>
+</html>
