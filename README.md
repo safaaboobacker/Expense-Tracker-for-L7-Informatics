@@ -1,63 +1,109 @@
-## 📊 Expense Tracker (Budget Manager)
-
-A command-line Python application that helps users track their daily expenses, manage monthly budgets, and receive email alerts when they're close to or exceed their spending limits.
-
-### 🔧 Features
-
-- 💸 **Add and categorize expenses**
-- 📊 **Track expenses by category and month**
-- 📁 **Stores data in both CSV and SQLite database**
-- 📬 **Sends email alerts when budgets are low or exceeded**
-- 🔐 **Secure user-specific budget tracking**
-- 📅 **Customizable budgets per month and category**
-- 🧠 Uses `SQLAlchemy`, `yagmail`, and `smtplib` for storage and email handling
+Sure! Here's the **entire `README.md` content in one clean text snippet** for you to copy and paste directly into your GitHub repo:
 
 ---
 
-### 📁 Project Structure
+```markdown
+# 💰 Expense Tracker Web App
 
-```
-├── expense_tracker.py      # Main script to run the app
-├── expense.py              # Contains Expense and SavingsGoal classes
-├── expenses.csv            # Stores logged expenses
-├── budgets.csv             # Stores monthly budgets
-├── expenses.db             # SQLite DB for persistent storage
-```
+A simple yet powerful expense tracking web app with budgeting and alert features. Built with **Python (Flask + SQLAlchemy)** for the backend and **HTML + JavaScript** for the frontend. Tracks expenses, stores data in SQLite, and sends email alerts when you exceed your budget.
 
 ---
 
-### 🚀 How to Run
+## 🚀 Features
 
-1. **Install Dependencies**
+- Add and store expenses with name, category, date, and user
+- Set monthly budgets per category
+- View expense summary and compare with budget
+- Sends email alerts when:
+  - You exceed the budget for a category
+  - Only 10% budget remains
+- Simple web interface (no login required)
+- Backend with CSV + SQLite storage
+- Modular and extensible code
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: HTML, JavaScript, CSS
+- **Backend**: Python, Flask, SQLAlchemy
+- **Database**: SQLite + CSV files
+- **Email**: `yagmail` (Gmail integration)
+- **Extras**: Flask-CORS for cross-origin frontend/backend
+
+---
+
+## 🧑‍💻 Setup Instructions
+
+### 1. Clone the repository
 
 ```bash
-pip install yagmail sqlalchemy
+git clone https://github.com/your-username/expense-tracker.git
+cd expense-tracker
 ```
 
-> For email alerts to work, you must enable [App Passwords](https://support.google.com/accounts/answer/185833) or set up Gmail API OAuth2.
-
-2. **Run the App**
+### 2. Create a virtual environment and install dependencies
 
 ```bash
-python expense_tracker.py
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
-Follow the interactive prompts to log expenses, set monthly budgets, and receive insights.
+### 3. Start the Flask Backend Server
+
+```bash
+python api_server.py
+```
+
+This will run the API server on `http://localhost:5000`.
+
+### 4. Start the Frontend
+
+From the same folder, run:
+
+```bash
+python -m http.server 8000
+```
+
+Then open [http://localhost:8000](http://localhost:8000) in your browser.
 
 ---
 
-### 📬 Email Alerts
+## 📂 File Structure
 
-When you exceed a budget or approach the limit (within 10%), the app sends you an automated email notification. Make sure to:
-
-- Replace the sender email and app password in `send_email_alert()` in `expense_tracker.py`.
-- Use Gmail App Passwords or OAuth2 (for enhanced security).
+```
+expense-tracker/
+│
+├── api_server.py           # Flask API to handle frontend communication
+├── expense.py              # Expense and SavingsGoal classes
+├── expense_tracker.py      # Core logic and CLI fallback
+├── expenses.csv            # File where expenses are stored (CSV)
+├── expenses.db             # SQLite database file
+├── budgets.csv             # File where budgets are stored
+├── index.html              # Frontend HTML file
+├── requirements.txt        # Python dependencies
+└── README.md               # This file
+```
 
 ---
 
-### 💡 Future Improvements
+## 📧 Email Alert Setup
 
-- Add a GUI interface with `Tkinter` or `PyQt`
-- Monthly expense visualizations (charts)
-- Export reports to PDF or Excel
-- Multi-user authentication system
+Make sure to update this line in `expense_tracker.py` with your Gmail account + app password:
+
+```python
+yag = yagmail.SMTP("your-email@gmail.com", "your-app-password")
+```
+
+> **Note:** Use a [Gmail App Password](https://support.google.com/accounts/answer/185833) instead of your main password.
+
+---
+
+## 🧠 Future Improvements
+
+- Charts (e.g., Pie chart of spending by category)
+- Login & user authentication
+- Monthly spending reports
+- Responsive UI with Bootstrap or React
+
